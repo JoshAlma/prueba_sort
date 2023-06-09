@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:13
+    restart: always
+    ports:
+      - "5454:5432"
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+  src:
+    depends_on:
+      - db
+    build: .
+    working_dir: /app
+    container_name: "src_we_company"
+    volumes:
+      - ./app/:/app
+    ports:
+      - "8000:8080"
+    restart: on-failure:10
+      
